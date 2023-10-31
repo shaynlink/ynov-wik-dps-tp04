@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: echo-configmap
+  namespace: echo-namespace
+data:
+  port_env: "3000"

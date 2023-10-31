@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: echo-deployment
+  namespace: echo-namespace
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: echo-app
+  template:
+    metadata:
+      labels:
+        app: echo-app
+    spec:
+      containers:
+      - name: echo-dot
+        image: registry.cluster.wik.cloud/public/echo
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        env:
+          - name: PING_LISTEN_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: echo-configmap
+                key: port_env
+        ports:
+        - containerPort: 3000
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: '50%'

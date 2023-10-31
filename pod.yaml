@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: echo-pod
+  namespace: echo-namespace
+  labels:
+   appName: echo-pod
+spec:
+  containers:
+    - name: echo-dot
+      image: registry.cluster.wik.cloud/public/echo
+      env:
+        - name: PING_LISTEN_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: echo-configmap
+              key: port_env
+      ports:
+        - containerPort: 3000

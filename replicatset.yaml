@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: echo-replicaset
+  labels:
+    appName: echo-dot
+    tier: echo-replicaset
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      tier: echo-replicaset
+  template:
+    metadata:
+      labels:
+        tier: echo-replicaset
+    spec:
+      containers:
+        - name: echo-dot
+          image: registry.cluster.wik.cloud/public/echo
+          env:
+            - name: PING_LISTEN_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: echo-configmap
+                  key: port_env
+          ports:
+            - containerPort: 3000
